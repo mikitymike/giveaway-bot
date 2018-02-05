@@ -1,0 +1,24 @@
+{
+  "name": "giveaway-bot",
+  "version": "1.0.0",
+  "description": "Install npm packages discord.js and delay",
+  "main": "bot.js",
+  "dependencies": {
+    "delay": "^2.0.0",
+    "discord.js": "^11.3.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mikitymike/giveaway-bot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mikitymike/giveaway-bot/issues"
+  },
+  "homepage": "https://github.com/mikitymike/giveaway-bot#readme"
+}
