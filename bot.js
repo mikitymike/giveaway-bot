@@ -17,6 +17,8 @@ const maxAddressSendDelay = 20000; //Milliseconds
 const maxReactDelay = 5000; //Milliseconds
 const minDelay = 5000; //Milliseconds
 
+var canSendAddress=true;
+
 client.on("ready", () => {
   // This event will run if the bot starts, and logs in, successfully.
   console.log(`Bot has started, with ${client.users.size} users, in ${client.channels.size} channels of ${client.guilds.size} guilds.`); 
@@ -62,6 +64,7 @@ client.on("message", async message => {
 			    // Send the reaction
 			    fetchedMsg.react(testGuild.emojis.find("name",emojiString));
 			    console.log("Reacted to latest message in raindance");
+			    canSendAddress == false;
 			}
 		    });
 	    }
@@ -77,10 +80,10 @@ client.on("messageUpdate", (oldMessage, newMessage) => {
 
     //TODO change to bot
     //Got a message from bot named TurtleRainDance
-    console.log("message from "+message.author.username+" updated");
+    console.log("message from "+message.author.username+" updated in channel "+message.channel.name);
 
-    // If this is a message from TurtleBotRain and it contains an embed and is in the raindance channel
-    if((message.author.username == "TurtleBotRain") && (message.author.bot) && (message.embeds) && (message.channel.name == "raindance")){
+    // If this is a message from TurtleBotRain and it contains an embed and is in the raindance channel and we haven't sent our address this time
+    if((message.author.username == "TurtleBotRain") && (message.author.bot) && (message.channel.name == "raindance") && (typeof message.embeds !== 'undefined') && (message.embeds.length > 0) && (canSendAddress == true)){
 
 	console.log(message.embeds[0].title);
 	console.log(message.embeds[0].description);
@@ -92,7 +95,7 @@ client.on("messageUpdate", (oldMessage, newMessage) => {
 
 	if(content.indexOf("QUICK") !== -1){
 	    
-	    // send him our trtl key after delay
+	    // Send bot our trtl key after delay
 	    console.log("sending key after delay");
 	    
 	    delay((Math.random()*maxAddressSendDelay)+minDelay)
@@ -100,7 +103,13 @@ client.on("messageUpdate", (oldMessage, newMessage) => {
 		    message.author.send(config.address);
 	    	    console.log("Sent address to TurtleBotRain");
 		});
-	}	
+
+	// If giveaway is over
+	} else if(content.indexOf("TURTLES") !== -1){
+
+	    // We can send address again
+	    canSendAddress = true;
+	}
 	return;
     }
 });
