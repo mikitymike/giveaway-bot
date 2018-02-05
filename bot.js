@@ -64,7 +64,6 @@ client.on("message", async message => {
 			    // Send the reaction
 			    fetchedMsg.react(testGuild.emojis.find("name",emojiString));
 			    console.log("Reacted to latest message in raindance");
-			    canSendAddress == false;
 			}
 		    });
 	    }
@@ -85,9 +84,6 @@ client.on("messageUpdate", (oldMessage, newMessage) => {
     // If this is a message from TurtleBotRain and it contains an embed and is in the raindance channel and we haven't sent our address this time
     if((message.author.username == "TurtleBotRain") && (message.author.bot) && (message.channel.name == "raindance") && (typeof message.embeds !== 'undefined') && (message.embeds.length > 0) && (canSendAddress == true)){
 
-	console.log(message.embeds[0].title);
-	console.log(message.embeds[0].description);
-    
 	// Its a rain announcement
 	// TODO check message contents
 
@@ -97,7 +93,7 @@ client.on("messageUpdate", (oldMessage, newMessage) => {
 	    
 	    // Send bot our trtl key after delay
 	    console.log("sending key after delay");
-	    
+	    canSendAddress = false;
 	    delay((Math.random()*maxAddressSendDelay)+minDelay)
 		.then(() => {
 		    message.author.send(config.address);
@@ -105,8 +101,10 @@ client.on("messageUpdate", (oldMessage, newMessage) => {
 		});
 
 	// If giveaway is over
-	} else if(content.indexOf("TURTLES") !== -1){
+	} else if(content.indexOf("WAS GIVEN") !== -1){
 
+	    console.log("Giveaway Complete");
+	    
 	    // We can send address again
 	    canSendAddress = true;
 	}
