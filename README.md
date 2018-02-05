@@ -1,3 +1,3 @@
 # giveaway-bot
 
-Install npm packages discord.js and delay.js
+Install npm packages discord.js and delay
