@@ -32,12 +32,12 @@ client.on("message", async message => {
     if(!message.author.bot) return;
 
     //Got a message from bot named TurtleBotRain
-    if((message.author.username == "TurtleBotRain")){
-    
-	if((message.channel.type == "dm")){
+    if(message.channel.type == "dm"){
 
-	    console.log("Got DM from TurtleBotRain: "+message.content);	    
+	console.log("Got DM from ${message.author.username}: ${message.content}");	    
 
+	if(message.author.username == "TurtleBotRain"){
+	    
 	    //Get the message contents
 	    let msgContent = message.content
 	    
@@ -80,20 +80,27 @@ client.on("messageUpdate", (oldMessage, newMessage) => {
     //TODO change to bot
     //Got a message from bot named TurtleRainDance
     console.log("message from "+message.author.username+" updated in channel "+message.channel.name);
-
+    console.log(message.content);
+    if ((typeof message.embeds !== 'undefined') && (message.embeds.length > 0))
+    {
+	console.log(message.embeds[0].title);
+	console.log(message.embeds[0].description);
+    }
     // If this is a message from TurtleBotRain and it contains an embed and is in the raindance channel and we haven't sent our address this time
-    if((message.author.username == "TurtleBotRain") && (message.author.bot) && (message.channel.name == "raindance") && (typeof message.embeds !== 'undefined') && (message.embeds.length > 0) && (canSendAddress == true)){
+    if((message.author.username == "TurtleBotRain") && (message.author.bot) && (message.channel.name == "raindance") && (typeof message.embeds !== 'undefined') && (message.embeds.length > 0)){
 
+	console.log("Got a message with an embed");
 	// Its a rain announcement
 	// TODO check message contents
 
 	var content = message.embeds[0].title;
-
-	if(content.indexOf("QUICK") !== -1){
+	console.log("cansend: "+canSendAddress);
+	if((content.indexOf("QUICK") !== -1) && (canSendAddress == true)){
 	    
 	    // Send bot our trtl key after delay
 	    console.log("sending key after delay");
 	    canSendAddress = false;
+	    console.log("cansend: "+canSendAddress);
 	    delay((Math.random()*maxAddressSendDelay)+minDelay)
 		.then(() => {
 		    message.author.send(config.address);
@@ -107,6 +114,13 @@ client.on("messageUpdate", (oldMessage, newMessage) => {
 	    
 	    // We can send address again
 	    canSendAddress = true;
+
+	    console.log("cansend: "+canSendAddress);
+	    
+	} else if((content.indexOf("IT BEGINS TO RAIN") !== -1) || (content.indexOf("TUT TUT") !== -1)){
+
+	    // If we missed the last giveaway ending, prime canSendAddress before giveaway registration begins
+	    canSendAddress = true
 	}
 	return;
     }
